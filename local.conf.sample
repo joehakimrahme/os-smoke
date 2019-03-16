@@ -1,0 +1,20 @@
+## Path to the rc file that sets up credentials and auth_url. This file
+## should be provided by your cloud administrator.
+# SMK_RCFILE=openrc
+
+## Name of the image used for the instance
+# SMK_IMG_NAME=cirros
+
+## If the image provided in `SMK_IMG_NAME` doesn't exist, attempt to
+## upload it by fetching the file located at `SMK_IMG_URL`
+# SMK_IMG_URL=http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+
+## Names used internally by the script. They're exposed to the user as
+## a convenience, in case there's a need to modify this.
+# SMK_PROVIDER_NETWORK=public
+# SMK_PRIVATE_NETWORK=private
+# SMK_DEVSTACK_NETWORK=devstack
+# SMK_PRIVATE_SUBNET=private-subnet
+# SMK_DEVSTACK_SUBNET=devstack-subnet
+# SMK_INSTANCE_NAME=devstack
+# SMK_ROUTER_NAME=testrouter
