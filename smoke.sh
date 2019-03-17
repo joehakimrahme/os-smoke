@@ -11,12 +11,15 @@
 # * A router
 # * An image (if doesn't exist)
 # * A flavor (if doesn't exist)
+# * (optional) a keypair to inject in the instance
+# * A security group allowing ssh and http connections
+# * A floating ip from the provider network
 # * An instance using all of the above
 
 
 
 # Fail early and print usage if no arg is supplied
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     echo "Usage: $0 (init|cleanup)"
     exit
 fi
@@ -29,12 +32,15 @@ set -o xtrace
 unset GREP_OPTIONS
 umask 022
 
-TOP_DIR=$(cd $(dirname "$0") && pwd)
+TOP_DIR=$(cd "$(dirname "$0")" && pwd)
 
 # source options from local.conf if it exists and set default values
 # if any is missing.
-if [ -f $TOP_DIR/local.conf ]; then
-    source $TOP_DIR/local.conf
+if [ -f "$TOP_DIR"/local.conf ]; then
+
+    # shellcheck disable=SC1091
+    # shellcheck source=local.conf
+    . "$TOP_DIR"/local.conf
 fi
 
 SMK_RCFILE=${SMK_RCFILE:-openrc}
@@ -52,10 +58,12 @@ if [ ! -f "$SMK_RCFILE" ]; then
     echo "missing RC file. Set the variable SMK_RCFILE in the environment"
     exit
 fi
-source "$SMK_RCFILE"
+
+# shellcheck disable=SC1090
+. "$SMK_RCFILE"
 
 
-function init {
+init () {
 
     # Check that the provider network exists.
     if ! openstack network list -c Name -f value | grep -q "$SMK_PROVIDER_NETWORK"; then
@@ -100,7 +108,7 @@ function init {
     devstack_network_id=$(openstack network list -c ID -c Name -f value | grep "$SMK_DEVSTACK_NETWORK" | cut -d ' ' -f 1)
     private_network_id=$(openstack network list -c ID -c Name -f value | grep "$SMK_PRIVATE_NETWORK" | cut -d ' ' -f 1)
 
-    openstack server create --flavor "$SMK_FLAVOR_NAME" --image "$SMK_IMG_NAME" --nic net-id=$devstack_network_id --nic net-id=$private_network_id "$SMK_INSTANCE_NAME" --wait
+    openstack server create --flavor "$SMK_FLAVOR_NAME" --image "$SMK_IMG_NAME" --nic net-id="$devstack_network_id" --nic net-id="$private_network_id" "$SMK_INSTANCE_NAME" --wait
 
     # SECID=$(openstack security group list | grep $(openstack project show admin -f value -c id) | head -n 2 | awk '{print $2}')
     # openstack security group rule create $SECID --protocol tcp --dst-port 22 --remote-ip 0.0.0.0/0 2>/dev/null
@@ -108,13 +116,13 @@ function init {
 
 }
 
-function cleanup {
+cleanup () {
 
-    if [[ -n $(openstack server list -c Name -f value) ]]; then
+    if [ -n "$(openstack server list -c Name -f value)" ]; then
 	openstack server delete "$SMK_INSTANCE_NAME"
     fi
 
-    if [[ -n $(openstack port list -c Name -f value) ]]; then
+    if [ -n "$(openstack port list -c Name -f value)" ]; then
 	if openstack router list -c Name -f value | grep -q "$SMK_ROUTER_NAME"; then
 	    openstack router remove subnet "$SMK_ROUTER_NAME" "$SMK_DEVSTACK_SUBNET"
 	    openstack router remove subnet "$SMK_ROUTER_NAME" "$SMK_PRIVATE_SUBNET"

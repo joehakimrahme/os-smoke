@@ -3,7 +3,8 @@ os-smoke.sh
 
 A quick utility to set up networking and launch a single instance on a
 fresh OpenStack deployment. I use this as a quick sanity test, which I
-find much faster than setting up Tempest.
+find much faster than setting up Tempest. Internally, `os-smoke` uses
+the `python-openstackclient`[1], so make sure you have this installed.
 
 Usage
 -----
@@ -33,3 +34,22 @@ A `local.conf.sample` has been provided with this script and can serve
 as a starting point for configuration. The file comments go more in
 details in the description of each variable, and show each variable
 default value.
+
+
+Testing
+-------
+
+Not much testing for now, but I do use a stylechecker[1], to support a
+few shell formats:
+
+* bash
+* dash
+* ksh
+* sh
+
+A Makefile is provided to run the tests. It can be executed like this:
+
+    $ make test
+
+[1]: https://docs.openstack.org/python-openstackclient/latest/
+[2]: https://www.shellcheck.net
