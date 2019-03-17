@@ -6,8 +6,13 @@
 # SMK_IMG_NAME=cirros
 
 ## If the image provided in `SMK_IMG_NAME` doesn't exist, attempt to
-## upload it by fetching the file located at `SMK_IMG_URL`
-# SMK_IMG_URL=http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+## upload it by fetching the file located at `SMK_IMG_FILE`
+# SMK_IMG_FILE=http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+
+## The script assumes the existence of a public provider
+## network. This variable holds the name of the network
+# SMK_PROVIDER_NETWORK=public
+
 
 ## Names used internally by the script. They're exposed to the user as
 ## a convenience, in case there's a need to modify this.

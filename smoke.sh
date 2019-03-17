@@ -81,6 +81,14 @@ function init {
 	openstack router add subnet "$SMK_ROUTER_NAME" "$SMK_PRIVATE_SUBNET"
     fi
 
+    if ! openstack image list | grep -w "$SMK_IMG_NAME"; then
+	if [ -n "$SMK_IMG_FILE" ]; then
+	    openstack image create --disk-format qcow2 --container-format bare --file "$SMK_IMG_FILE" "$SMK_IMG_NAME"
+	else
+	    echo "Image $SMK_IMG_NAME doesn't exist. os-smoke can create one if provided with the SMK_IMG_FILE environment variable"
+	    exit
+	fi
+    fi
     # SECID=$(openstack security group list | grep $(openstack project show admin -f value -c id) | head -n 2 | awk '{print $2}')
     # openstack security group rule create $SECID --protocol tcp --dst-port 22 --remote-ip 0.0.0.0/0 2>/dev/null
     # openstack security group rule create $SECID --protocol icmp --dst-port -1 --remote-ip 0.0.0.0/0 2>/dev/null
