@@ -16,10 +16,9 @@
 
 ## Names used internally by the script. They're exposed to the user as
 ## a convenience, in case there's a need to modify this.
-# SMK_PROVIDER_NETWORK=public
 # SMK_PRIVATE_NETWORK=private
 # SMK_DEVSTACK_NETWORK=devstack
 # SMK_PRIVATE_SUBNET=private-subnet
 # SMK_DEVSTACK_SUBNET=devstack-subnet
-# SMK_INSTANCE_NAME=devstack
 # SMK_ROUTER_NAME=testrouter
+# SMK_INSTANCE_NAME=devstack

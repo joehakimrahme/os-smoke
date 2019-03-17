@@ -2,12 +2,18 @@
 
 # Author: Joe Hakim Rahme <jhakimra@redhat.com>
 # Past authors: Gabriel Szasz <gszasz@redhat.com>, Archit Modi <amodi@redhat.com>
-# Description:
-
-# This script can be run on a fresh Infrared install to validate that
-# an instance can be spawned and connect to it.
 #
-# Tested on: RHOS13, RHOS14
+# Description:
+#
+# This script provides a minimal opinionated smoke test to run on a
+# fresh openstack deployment. Resources created:
+# * 2 networks with one subnet each
+# * A router
+# * An image (if doesn't exist)
+# * A flavor (if doesn't exist)
+# * An instance using all of the above
+
+
 
 # Fail early and print usage if no arg is supplied
 if [ -z $1 ]; then
@@ -43,7 +49,8 @@ SMK_INSTANCE_NAME=${SMK_INSTANCE_NAME:-devstack}
 
 
 if [ ! -f "$SMK_RCFILE" ]; then
-    die $LINENO "missing RC file. Set the variable SMK_RCFILE in the environment"
+    echo "missing RC file. Set the variable SMK_RCFILE in the environment"
+    exit
 fi
 source "$SMK_RCFILE"
 
@@ -89,12 +96,16 @@ function init {
 	    exit
 	fi
     fi
+
+    devstack_network_id=$(openstack network list -c ID -c Name -f value | grep "$SMK_DEVSTACK_NETWORK" | cut -d ' ' -f 1)
+    private_network_id=$(openstack network list -c ID -c Name -f value | grep "$SMK_PRIVATE_NETWORK" | cut -d ' ' -f 1)
+
+    openstack server create --flavor "$SMK_FLAVOR_NAME" --image "$SMK_IMG_NAME" --nic net-id=$devstack_network_id --nic net-id=$private_network_id "$SMK_INSTANCE_NAME" --wait
+
     # SECID=$(openstack security group list | grep $(openstack project show admin -f value -c id) | head -n 2 | awk '{print $2}')
     # openstack security group rule create $SECID --protocol tcp --dst-port 22 --remote-ip 0.0.0.0/0 2>/dev/null
     # openstack security group rule create $SECID --protocol icmp --dst-port -1 --remote-ip 0.0.0.0/0 2>/dev/null
 
-    # devstack_network_id=$(openstack network list -c ID -c Name -f value | awk '/devstack/ {print $1}')
-    # private_network_id=$(openstack network list -c ID -c Name -f value | awk '/private/ {print $1}')
 }
 
 function cleanup {
