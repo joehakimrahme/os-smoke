@@ -122,7 +122,7 @@ cleanup () {
 	openstack server delete "$SMK_INSTANCE_NAME"
     fi
 
-    if [ -n "$(openstack port list -c Name -f value)" ]; then
+    if [ -n "$(openstack port list -c ID -f value)" ]; then
 	if openstack router list -c Name -f value | grep -q "$SMK_ROUTER_NAME"; then
 	    openstack router remove subnet "$SMK_ROUTER_NAME" "$SMK_DEVSTACK_SUBNET"
 	    openstack router remove subnet "$SMK_ROUTER_NAME" "$SMK_PRIVATE_SUBNET"
