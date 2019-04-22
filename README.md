@@ -9,14 +9,11 @@ the `python-openstackclient`[1], so make sure you have this installed.
 Usage
 -----
 
-	$ ./os-smoke.sh
-	Usage: ./os-smoke.sh (init|cleanup)
+os-smoke provides 2 scripts:
 
-`os-smoke.sh` is a script that takes an action argument:
-
-* `./os-smoke.sh init` will create resources and spawn an instance
-* `./os-smoke.sh cleanup` will destroy the instance and free the resources
-
+* `./os-smoke.sh` will create the artifacts (server, networks,
+  subnets, router, floating IP)
+* `./os-unsmoke.sh` will tear down the artifacts
 
 Configuration
 -------------
