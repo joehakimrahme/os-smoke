@@ -16,7 +16,9 @@
 # * A floating ip from the provider network
 # * An instance using all of the above
 
+SMK_START_TIME=$(date +%s)
 
+# shellcheck disable=SC1091
 . common.sh
 
 # Check that the provider network exists.
@@ -52,10 +54,10 @@ fi
 
 if ! openstack image list | grep -w "$SMK_IMG_NAME"; then
     if [ -n "$SMK_IMG_FILE" ]; then
-	openstack image create --disk-format qcow2 --container-format bare --file "$SMK_IMG_FILE" "$SMK_IMG_NAME"
+        openstack image create --disk-format qcow2 --container-format bare --file "$SMK_IMG_FILE" "$SMK_IMG_NAME"
     else
-	echo "Image $SMK_IMG_NAME doesn't exist. os-smoke can create one if provided with the SMK_IMG_FILE environment variable"
-	exit
+        echo "Image $SMK_IMG_NAME doesn't exist. os-smoke can create one if provided with the SMK_IMG_FILE environment variable"
+        exit
     fi
 fi
 
@@ -69,12 +71,7 @@ openstack server create --flavor "$SMK_FLAVOR_NAME" --image "$SMK_IMG_NAME" --ni
 # openstack security group rule create $SECID --protocol icmp --dst-port -1 --remote-ip 0.0.0.0/0 2>/dev/null
 
 
-SMK_START_TIME=$(date +%s)
-if [ "$1" = "init" ]; then
-    init
-elif [ "$1" = "cleanup" ]; then
-    cleanup
-fi
+
 SMK_END_TIME=$(date +%s)
 
 set +o xtrace
