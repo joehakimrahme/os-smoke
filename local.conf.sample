@@ -13,6 +13,8 @@
 ## network. This variable holds the name of the network
 # SMK_PROVIDER_NETWORK=public
 
+## The flavor of the smoke instance
+# SMK_FLAVOR_NAME=m1.nano
 
 ## Names used internally by the script. They're exposed to the user as
 ## a convenience, in case there's a need to modify this.

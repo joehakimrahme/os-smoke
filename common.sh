@@ -26,7 +26,7 @@ SMK_PRIVATE_SUBNET=${SMK_PRIVATE_SUBNET:-private-subnet}
 SMK_DEVSTACK_SUBNET=${SMK_DEVSTACK_SUBNET:-devstack-subnet}
 SMK_ROUTER_NAME=${SMK_ROUTER_NAME:-testrouter}
 SMK_INSTANCE_NAME=${SMK_INSTANCE_NAME:-devstack}
-
+SMK_FLAVOR_NAME=${SMK_FLAVOR_NAME:-m1.nano}
 
 if [ ! -f "$SMK_RCFILE" ]; then
     echo "missing RC file. Set the variable SMK_RCFILE in the environment"

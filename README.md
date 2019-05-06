@@ -36,7 +36,7 @@ default value.
 Testing
 -------
 
-Not much testing for now, but I do use a stylechecker[1], to support a
+Not much testing for now, but I do use a stylechecker[2], to support a
 few shell formats:
 
 * bash
